@@ -1,0 +1,349 @@
+@import 'mixin';
+@import 'var';
+.p-evaluation-management {
+  .c-toolbar2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    &__inner {
+      width: calc(100% - 260px);
+      justify-content: stretch;
+    }
+  }
+  .group-filter {
+    // display: flex;
+    // align-items: center;
+    // justify-content: stretch;
+    &__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
+  .create-btn {
+    width: 250px;
+    height: 50px;
+    flex: 1;
+    margin-left: 10px;
+  }
+  .c-btn3 {
+    width: 100%;
+    height: 100%;
+  }
+  #create-icon {
+    width: 36px;
+    font-size: 3.6rem;
+    margin-right: 7px;
+  }
+  .c-selectBox {
+    flex-grow: 1;
+    margin-right: 10px;
+  }
+  .c-btn2 {
+      margin-right: 10px;
+    
+  }
+
+  .c-dropdown {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    
+    &__title {
+      border-color: #fff;
+      color: #fff;
+      height: 35px;
+      font-size: 1.2rem;
+    }
+    &__item {
+      border-radius: 3px;
+    }
+  }
+  .icon-arrow {
+    font-size: 2rem;
+  }
+
+  .MuiSvgIcon-root {
+    width: 24px !important;
+    font-size: 2.4rem !important;
+    // margin-right: 5px;
+  }
+  
+}
+
+.evaluation {
+  margin-bottom: 10px;
+  padding: 10px 20px;
+  background-color: $cl-gray10;
+
+  display: flex;
+  align-items: center;
+  justify-self: space-between;
+  flex-flow: row wrap;
+  
+  &__column {
+
+  }
+  &-icon {
+    width: 140px;
+    background-color: $cl-blue8;
+    color: #fff;
+    text-align: center;
+    p {
+      &:first-child {
+        background: $cl-blue7;
+        font-size: 1.6rem;
+        padding: 8px 10px;
+      }
+      &:last-child {
+        padding: 23px 10px;
+        max-height: 90px;
+      }
+    }
+    //=============
+    &.un-auth {
+      background-color: $cl-gray14;
+      p {
+        &:first-child {
+          background-color: $cl-gray13;
+        }
+      }
+    }
+  }
+  &-info {
+    flex: 1;
+    margin: 0 5px;
+  }
+  &-status {
+    background-color: $cl-green2;
+    font-size: 1.6rem;
+    padding: 8px 10px;
+    color: #fff;
+    text-align: center;
+    &--editing{
+      background: #569780;
+    }
+    &--shared {
+      background: #4c79a1;
+    }
+    &--private {
+      background: #808080;
+    }
+  }
+  &-title {
+    font-size: 2.2rem;
+    padding: 25px 20px;
+    background-color:  #fff;
+    .c-textField {
+      border-radius: 3px;
+      font-size: 2.2rem;
+      text-align: center;
+      color: $cl-gray11;
+      &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+        color: $cl-gray11;
+        opacity: 1; /* Firefox */
+      }
+      
+      &:-ms-input-placeholder { /* Internet Explorer 10-11 */
+        color: $cl-gray11;
+      }
+      
+      &::-ms-input-placeholder { /* Microsoft Edge */
+        color: $cl-gray11;
+      }
+      &:focus {
+        border: 2px solid $cl-blue2;
+      }
+      //=============
+      &.is-disabled {
+        border: 0;
+        pointer-events: none;
+      }
+    }
+  }
+  &-action {
+    width: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-flow: row wrap;
+    button {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      width: 80px;
+      background-color: $cl-gray7;
+      color: #fff;
+      font-size: 1.3rem;
+      height: 75px;
+      border: 0;
+      + button {
+        margin-left: 5px;
+      }
+      &:last-of-type {
+        flex-direction: row;
+        flex: 1;
+        font-size: 1.6rem;
+        background-color: $cl-red6;
+        img {
+          min-width: 24px;
+          // margin-right: 5px;
+        }
+      }
+      //===========
+      &.is-disabled {
+        opacity: 0.6;
+        background-color: $cl-red7;
+        color: $cl-gray15;
+      }
+    }
+  }
+  &-bottom {
+    flex: 0 0 100%;
+    padding: 15px 0 5px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &-creator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    div {
+      margin: 0 5px;
+    }
+    .icon {
+      margin-right: 5px;
+    }
+  }
+  &-tag {
+    // width: 300px;
+    display: flex;
+    align-items: center;
+    .c-textField {
+      width: 300px;
+      border: 0;
+      border-radius: 3px;
+      height: 35px;
+    }
+    .tag {
+      position: relative;
+      &.is-disabled {
+        opacity: 0.3;
+        pointer-events: none;
+        .delete-tag {
+          pointer-events: none;
+        }
+      }
+    }
+    .delete-tag {
+      position: absolute;
+      top: 0;
+      right: 0px;
+      height: 35px;
+      width: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .3s;
+      cursor: pointer;
+      &:hover {
+        background: $cl-gray9;
+      }
+    }
+    #iconTag {
+      margin-right: 5px;
+    }
+
+  }
+  #iconBook, #iconView {
+    width: 28px;
+    font-size: 2.8rem;
+  }
+  .c-dropdown {
+    flex: 0 0 100%;
+    
+    &__title {
+      background-color: $cl-gray7;
+      border-width: 0;
+      margin-top: 5px;
+      border-radius: 0;
+      justify-content: center;
+      font-size: 1.6rem;
+      height: 45px;
+      position: relative;
+
+      span {
+        padding: 0 10px;
+      }
+
+      .icon-arrow {
+        position: absolute;
+        right: 15px;
+      }
+    }
+    &__content {
+      background-color: $cl-gray12;
+      padding: 5px 10px 10px;
+      border-radius: 3px;
+      border-bottom: 1px solid #fff;
+      top: 50px;
+    }
+    &__item {
+      display: flex;
+      align-items: center;
+      background: $cl-gray7;
+      margin-top: 8px;
+      padding: 13px 15px 13px 20px;
+      justify-content: center;
+      position: relative;
+      font-size: 1.4rem;
+      cursor: pointer;
+      transition: all .3s;
+      &:hover {
+        opacity: 0.8;
+      }
+      .MuiSvgIcon-root {
+        position: absolute;
+        left: 12px;
+      }
+      &.is-disabled {
+        background-color: $cl-gray16;
+        color: $cl-gray17;
+        pointer-events: none;
+        opacity: 0.6;
+        .MuiSvgIcon-root {
+          color: $cl-gray17 !important;
+        }
+      }
+      &.share-disabled {
+        background-color: #6e7b87;
+      }
+      &--blue {
+        background-color: $cl-blue9;
+      }
+
+    }
+    &__end {
+      .c-dropdown__item{
+        &:first-child {
+          padding-left: 35px;
+        }
+      }
+    }
+  }
+  #iconAccount, #iconTime {
+    width: 26px;
+    font-size: 2.6rem;
+  }
+  #iconSetting {
+    width: 24px;
+    font-size: 2.4rem;
+  }
+  #iconTag, #deleteTag {
+    width: 24px;
+    font-size: 2.4rem;
+  }
+}
+
+

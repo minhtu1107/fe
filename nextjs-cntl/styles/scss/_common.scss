@@ -1,0 +1,466 @@
+
+@import 'mixin.scss';
+@import 'var.scss';
+
+.l-container {
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+/*==============================================
+Component
+==============================================*/
+/* header
+---------------------------------*/
+.c-header {
+  padding: 40px 15px 15px;
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  &__item {
+    button {
+      & + button {
+        margin-left: 10px;
+      }
+    }
+  }
+}
+
+.c-account {
+  font-size: 1.6rem;
+  color: $cl-gray6;
+}
+#user-icon {
+  font-size: 3rem;
+  width: 30px;
+  color: $cl-gray5;
+  margin-right: 5px;
+}
+
+.c-logo {
+  margin-right: 30px;
+}
+
+/* footer
+---------------------------------*/
+.c-footer {
+	background: $cl-back1;
+	padding: 0 5px;
+	color: #fff;
+	text-align: right;
+	font-size: 1.3rem;
+	position: fixed;
+	left: 0;
+	right: 0;
+  bottom: 0;
+  &__inner {
+    padding: 15px 25px;
+    border-left: 4px solid $cl-blue1;
+    border-right: 4px solid $cl-blue1;
+  }
+}
+
+
+/* toolbar
+---------------------------------*/
+.c-toolbar {
+  padding: 0 15px;
+  margin-bottom: 30px;
+  &__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 50px;
+    padding: 5px 15px;
+    background-color: $cl-blue5;
+  }
+  h2 {
+    font-size: 1.6rem;
+    color: #fff;
+    font-weight: normal;
+  }
+  //=============
+  &2{
+    border-left: 8px solid $cl-green1;
+    padding-left: 8px;
+    margin: 0 15px 30px;
+    &__inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 50px;
+      padding: 5px 15px;
+      background-color: $cl-blue5;
+    }
+    h2 {
+      font-size: 1.6rem;
+      color: #fff;
+      font-weight: normal;
+    }
+  }
+}
+
+/* Layout
+---------------------------------*/
+.c-flex {
+  display: flex;
+  align-items: center;
+}
+
+
+/* title 
+---------------------------------*/
+.c-title1 {
+  font-size: 3.2rem;
+  font-weight: normal;
+  padding-left: 10px;
+  border-left: 2px solid $cl-blue2;
+}
+
+.c-title2 {
+  font-size: 1.6rem;
+  text-align: center;
+
+  span {
+    border-left: 5px solid $cl-gray7;
+    position: relative;
+    padding-left: 25px;
+    &:before {
+      content: "";
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 2px;
+      border-left: 2px solid $cl-gray7;
+      height: 100%;
+    }
+  }
+}
+
+/* button switch screen
+---------------------------------*/
+.c-switchPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  width: 43px;
+  height: 43px;
+  max-height: 43px;
+
+  text-transform: uppercase;
+  color: $cl-blue4;
+  font-size: 0.9rem;
+  
+  border-radius: 3px;
+  border: 1px solid $cl-blue4;
+  background-color: #fff;
+
+  cursor: pointer;
+}
+#back-icon {
+  font-size: 3rem;
+  width: 25px;
+  height: 25px;
+  color: $cl-blue4;
+}
+
+/* button
+---------------------------------*/
+.c-btn {
+	border: none;
+	border-radius: 3px;
+	box-shadow: none;
+	color: #fff;
+	background-color: #0066b3;
+	padding: 13px 30px;
+	font-size: 1.4rem;
+	cursor: pointer;
+  transition: all .3s;
+  &:hover {
+    opacity: 0.8;
+  }
+  &--gray {
+    background-color: $cl-gray8;
+  }
+  //=============
+  &1 {
+    font-size: 1.8rem;
+    color: #fff;
+    border: 0;
+    border-radius: 0;
+    padding: 20px 30px;
+    text-align: center;
+    justify-content: center;
+    //=============
+    @include breakpoint(sp) {
+      padding: 15px 20px;
+      font-size: 1.6rem;
+    }
+    &--red {
+      box-shadow: 0 2px 2px 0 rgba(157,39,45, 1), 0 1px 5px 0 rgba(157,39,45, 1), 0 3px 1px -2px rgba(157,39,45, 1);
+      background-color: $cl-red4;
+    }
+  
+    &--green {
+      background-color: $cl-green1;
+      box-shadow: 0 2px 2px 0 rgba(0, 104, 55, 1), 0 1px 5px 0 rgba(0, 104, 55, 1), 0 3px 1px -2px rgba(0, 104, 55, 1);
+    }
+    &--blue {
+      background-color: $cl-blue3;
+      box-shadow: 0 2px 2px 0 rgba(60, 70, 144, 1), 0 1px 5px 0 rgba(60, 70, 144, 1), 0 3px 1px -2px rgba(60, 70, 144, 1);
+    }
+  }
+  //==============
+  &2 {
+    border: 1px solid #fff;
+    border-radius: 5px;
+    font-size: 1.2rem;
+    color: #fff;
+    height: 35px;
+    width: 140px;
+    background-color: transparent;
+  }
+  //=============
+  &3 {
+    font-size: 1.6rem;
+    color: #fff;
+    text-align: center;
+    background-color: $cl-blue5;
+    border: 0;
+    border-radius: 3px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* link
+---------------------------------*/
+.c-link{
+  &:hover{
+    color: $cl-blue6;
+  }
+}
+.c-pointer {
+  cursor: pointer;
+}
+
+/* Input
+---------------------------------*/
+.c-textField {
+	border: 2px solid $cl-gray9;
+	width: 100%;
+	height: 40px;
+	padding: 0 10px;
+	font-size: 1.4rem;
+	&--1 {
+    border-width: 1px;
+  }
+  &--2 {
+    border-width: 1px;
+    background-color: #fff;
+    border-radius: 3px;
+  }
+}
+/*  select box
+---------------------------------*/
+.c-selectBox {
+  border: 1px solid $cl-gray9;
+  background: #fff;
+  border-radius: 3px;
+  height: 35px;
+  padding: 0 5px;
+}
+
+/*  form group
+---------------------------------*/
+.c-formGroup {
+
+}
+/*  
+---------------------------------*/
+
+/* validation form
+---------------------------------*/
+.c-errMsg {
+	font-size: 1.3rem;
+	color: $cl-red1;
+	margin-top: 5px;
+}
+
+.c-errMsgBar {
+	position: fixed;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	padding: 20px 20px;
+  color: #fff;
+  &--error {
+    background-color: $cl-red5;
+  }
+  &--success {
+    background-color: $cl-green1;
+  }
+}
+
+.is-required {
+  background-color: $cl-red2;
+  color: #fff;
+  font-size: 1.3rem;
+  padding: 3px 5px;
+}
+
+.c-dropdown {
+  position: relative;
+  &__title {
+    border: 1px solid $cl-gray4;
+    border-radius: 3px;
+    padding: 7px 33px;
+    color: $cl-gray4;
+    cursor: pointer;
+    &.is-opened {
+      background-color: rgba(143, 143, 143, 0.8);
+    }
+  }
+  &__content{
+    display: none;
+    position: absolute;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 999;
+    border-radius: 3px;
+    background-color: rgba(143,143,143,0.6);
+  }
+  &__item {
+    display: block;
+    text-shadow: 1px 1px rgba(124,113,107,0.6);
+    color: #fff;
+    padding: 10px 15px 10px 20px;
+    font-size: 1.2rem;
+  }
+  &__end {
+    display: flex;
+    align-items: center;
+    .c-dropdown__item {
+      flex-grow: 1;
+      flex-basis: 0;
+       + .c-dropdown__item {
+         margin-left: 5px;
+       }
+    }
+  }
+  //=============
+  .top-icon {
+    color: $cl-gray4;
+  }
+}
+
+.c-icon {
+  display: inline-block;
+  font-size: 1.2rem;
+  background: #666666;
+  color: #fff;
+  padding: 3px 3px;
+  border-radius: 2px;
+  margin-right: 5px;
+}
+
+.is-disabled {
+  pointer-events: none;
+}
+
+.c-pagination {
+  text-align: center;
+  margin: 40px 0 60px;
+  li {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 1px solid #ccc;
+    border-left: 0px solid #ccc;
+    text-align: center;
+    a{
+      display: block;
+      width: 100%;
+      line-height: 40px;
+      cursor: pointer;
+    }
+    &:first-child {
+      border-left: 1px solid #ccc;
+    }
+    &.is-active {
+      background-color: $cl-blue5;
+      color: #fff;
+    }
+    &.is-disabled {
+      pointer-events: none;
+      a{
+        opacity: 0.5;
+      }
+    }
+  }
+}
+
+.is-hidden {
+  display: none;
+}
+
+.c-dialog {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right:0;
+  bottom: 0;
+  z-index: 999;
+  &__inner {
+    width: 400px;
+    padding: 5px 25px 10px;
+    box-shadow: 0px 16px 24px 2px rgba(0,0,0,0.14),
+                0 6px 30px 5px rgba(0,0,0,0.12),
+                0 8px 10px -5px rgba(0,0,0,0.4);
+    top: 50%;
+    left: 50%;
+    background-color: #fff;
+    transform: translate(-50%, -50%);
+    position: absolute;
+    z-index: 3;
+    color: #000;
+  }
+  &__title {
+    font-size: 2rem;
+
+  }
+  &__content {
+    padding: 25px 0;
+    line-height: 1.7;
+  }
+  &__action {
+    text-align: right;
+    .c-btn {
+      width: 72px;
+      padding: 12px 10px;
+      text-transform: uppercase;
+      &--cancel {
+        background-color: $cl-gray18;
+      }
+      &--ok {
+        margin-left: 10px;
+        background-color: $cl-blue10;
+      }
+    }
+    
+  }
+  &__overlay {
+    background-color: rgba(255,255,255,0.6);
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+}

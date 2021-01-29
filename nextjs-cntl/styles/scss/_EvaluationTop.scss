@@ -1,0 +1,89 @@
+@import 'var.scss';
+@import 'mixin';
+
+.p-top {
+  background: url('/images/bg_top.png') no-repeat center;
+  background-size: cover;
+  min-height: 100vh;
+  &__head {
+    padding: 10px 20px 50px 20px;
+    display: flex;
+    justify-content: space-between;
+  }
+  &__account {
+    .top-icon {
+      color: #212121;
+    }
+    .license-code {
+      margin-bottom: 5px;
+    }
+  }
+  &__headLink {
+    display: flex;
+    justify-content: right;
+  }
+  &__main {
+    text-align: center;
+    padding-top: 10%;
+    img{
+      @include breakpoint(sp) {
+        width: 70%;
+      }
+    }
+  }
+  &__footer {
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    &__inner{
+      background-color: rgba(117,117,117,0.9);
+      padding: 15px 30px;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    //=============
+    .copyright {
+      text-align: right;
+      padding: 10px 30px;
+      color: $cl-gray4;
+    }
+  }
+  //=============
+  .top-icon {
+    font-size: 2.4rem;
+    margin-right: 5px;
+  }
+  //=============
+  .btn-logout {
+    color: $cl-red3;
+    border: 1px solid $cl-red3;
+    border-radius: 3px;
+    padding: 5px 20px;
+    max-height: 40px;
+    margin-left: 10px;
+    cursor: pointer;
+    .top-icon {
+      color: $cl-red3;
+    }
+  }
+  //=============
+  .group-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 100px;
+    button {
+      min-width: 245px;
+      @include breakpoint(tablets) {
+        min-width: 0;
+      }
+      &+ button {
+        width: 25%;
+        max-width: 245px;
+        margin-left: 25px;
+      }
+    }
+  }
+}

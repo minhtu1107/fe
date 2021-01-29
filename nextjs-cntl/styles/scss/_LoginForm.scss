@@ -1,0 +1,94 @@
+@import 'var';
+@import 'mixin';
+.p-login{
+  background: url("/images/bg_login.jpg") no-repeat center;
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: 100vh;
+  //================
+  @include breakpoint(sp) {
+    flex-direction: column;
+  }
+  //================
+  &__logo {
+    width: 30%;
+    min-height: 100vh;
+    background: #fff;
+    padding: 0 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    //----------------
+    @include breakpoint(sp) {
+      width: 100%;
+      text-align: center;
+      padding: 50px 20px;
+      display: block;
+      min-height: 0;
+    }
+  }
+  &__form {
+    width: 70%;
+    //----------------
+    @include breakpoint(sp) {
+      width: 100%;
+      padding: 50px 20px;
+    }
+  }
+  //================
+  .form {
+    width: calc(100% - 100px);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px 50px 30px;
+    border-top: 5px solid $cl-blue1;
+    background-color: rgba(238, 239, 239, 0.6);
+    @include breakpoint(sp) {
+      padding: 20px 30px;
+    }
+    &-group {
+      + .form-group {
+        margin-top: 15px;
+      }
+    }
+    &-action {
+      margin: 30px auto;
+      text-align: center;
+      @include breakpoint(sp) {
+        margin: 0 auto 20px;
+      }
+    }
+    &-notice {
+      text-align: center;
+    }
+    &-error {
+      color: $cl-red1;
+      font-size: 1.6rem;
+      margin: 20px 0 15px;
+      text-align: center;
+    }
+  }
+  //================
+  .c-btn {
+    font-size: 1.6rem;
+  }
+  //================
+  .c-link {
+    font-size: 1.3rem;
+    text-align: center;
+  }
+}
+
+#form-logo {
+  display: block;
+  width: 120px;
+  height: auto;
+  margin: 0px auto 35px;
+  color: $cl-gray1; 
+  @include breakpoint(sp) {
+    width: 80px;
+    margin: 0px auto 20px;
+  }
+}
