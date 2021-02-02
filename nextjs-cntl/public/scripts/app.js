@@ -1562,11 +1562,9 @@ function onConfig(config) {
 }
 
 function load() {
-  console.log("appp loadddđ");
-  let subElement = document.getElementById('overlayButton');
-  if(subElement) {
-    subElement.onclick=onExpandOverlay_Click;
-  }
+	console.log("appp loadddđ");
+	let subElement = document.getElementById('overlayButton');
+	subElement.onclick=onExpandOverlay_Click;
 	setupHtmlEvents();
 	setupFreezeFrameOverlay();
 	registerKeyboardEvents();
