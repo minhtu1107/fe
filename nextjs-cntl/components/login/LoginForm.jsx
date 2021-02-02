@@ -77,7 +77,7 @@ const LoginForm = () => {
               type="text"
               name="email" 
               className="c-textField" 
-              placeholder={"lang.login.username_placeholder"} 
+              placeholder={"Enter e-mail address"} 
               onChange={handleOnChange}/>
 
             {errInputField.email &&
@@ -90,7 +90,7 @@ const LoginForm = () => {
               type="password"
               name="password" 
               className="c-textField" 
-              placeholder={"lang.login.password_placeholder"} 
+              placeholder={"Enter password"} 
               onChange={handleOnChange}/>
 
             {errInputField.password &&
@@ -105,14 +105,14 @@ const LoginForm = () => {
           }
 
           <div className="form-action">
-            <button className="c-btn" type="submit">{"lang.login.btn_text"}</button>
+            <button className="c-btn" type="submit">{"Log-in"}</button>
           </div>
 
-          <div className="form-notice">
+          {/* <div className="form-notice">
             <Link href="/auth/forgot-password">
               <a className="c-link">{"lang.login.text_forgot_password"}</a>
             </Link>
-          </div>
+          </div> */}
         </form>
       </div>
     </div>
