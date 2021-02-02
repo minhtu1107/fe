@@ -44,7 +44,7 @@ export const validateInput = (inputName, inputValue) => {
     
   }
   if(inputName === "password") {
-    errorTxt = inputValue === "" ? lang.common.validation_required : "";
+    errorTxt = inputValue === "" ? "lang.common.validation_required" : "";
   }
 
   if(inputName === "password-condition") {

@@ -286,4 +286,11 @@ img#playButton{
   left: 50%;
   background: var(--colour5);
 }
+
+.user-name {
+  top: 2%;
+  left: 2%;
+  position: absolute;
+  color: #FF5035;
+}
 /*** Toggle Switch styles ***/

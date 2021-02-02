@@ -47,7 +47,8 @@ const options = {
       session = {
         id: user.id,
         email: user.email,
-        token: user.access_token
+        token: user.access_token,
+        role: user.role
       }
       return Promise.resolve(session);
     },
@@ -59,7 +60,8 @@ const options = {
         token = {
           id: user.id,
           email: user.email,
-          token: user.access_token
+          token: user.access_token,
+          role: user.role
         }
       }
       return Promise.resolve(token);
