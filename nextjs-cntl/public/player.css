@@ -25,13 +25,13 @@
 	z-index: 10;
 }
 
-#statsContainer{
+#statsContainer, #usersContainer{
 	background-color: rgba(0,0,0,0.8);
 	text-align: left;
 	display: none;
 }
 
-#stats{
+#stats, .stats{
 	font-size: 14px;
 	font-weight: bold;
 	padding: 6px;

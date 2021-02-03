@@ -35,10 +35,17 @@ const helloSecure = (params) => {
   return axios.get(url);
 }
 
+const getPlayersList = (params) => {
+  const url = getUrl('players/list');
+  console.log("request hello  " + url);
+  return axios.get(url);
+}
+
 export {
   loginCallback,
   login,
   logout,
   hello,
   helloSecure,
+  getPlayersList,
 };

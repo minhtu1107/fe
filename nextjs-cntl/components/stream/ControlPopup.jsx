@@ -1,4 +1,6 @@
 import Router from 'next/router';
+import { useState, useRef } from 'react';
+import {getPlayersList} from '../../services/user';
 
 const ControlPopup = (props) => {
 
@@ -59,6 +61,49 @@ const ControlPopup = (props) => {
     )
   }
 
+  const stopStreaming = () => {
+    return (
+      <div id="Stop Streaming">
+        <div className="settings-text">Stop</div>
+        <label className="btn-overlay">
+          <button onClick={() => {disconnect(); Router.push('/streamming/player');}}>-</button>
+        </label>
+      </div>
+    )
+  }
+
+  // setInterval(() => { getPlayersList().then(res => { console.log(res.data) }) }, 5000);
+  const showUser = useRef(null);
+  const userContainer = useRef(null);
+  const [userList, setUserList] = useState([]);
+
+  const getUsers = () => {
+    getPlayersList().then(res => { console.log(res.data) });
+    userContainer.current.style.display = showUser.current.checked ? "block" : "none";
+  }
+
+  const playerList = () => {
+
+    return (
+      <div id="connectedList">
+        <div className="settings-text">Connected Users</div>
+        <label className="tgl-switch">
+          <input type="checkbox" id="show-users" className="tgl tgl-flat" onChange={getUsers} ref={showUser} />
+          <div className="tgl-slider"></div>
+        </label>
+        <div id="usersContainer" ref={userContainer}>
+          {userList.length > 0 ? userList.map(val => (
+            <div key={val.email} className="stats">
+              {val.email}
+            </div>
+          )) : (<div className="stats">
+            No user
+          </div>)}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div id="overlay" className="overlay">
       <div id="overlayButton">+</div>
@@ -67,6 +112,8 @@ const ControlPopup = (props) => {
         {fillWindow()}
         {qualityControlOwnership()}
         {statsSetting()}
+        {playerList()}
+        {stopStreaming()}
         <div id="Logout">
           <div className="settings-text">Logout</div>
           <label className="btn-overlay">
