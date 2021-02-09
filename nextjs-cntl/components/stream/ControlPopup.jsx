@@ -1,6 +1,6 @@
 import Router from 'next/router';
 import { useEffect, useState, useRef } from 'react';
-import { getPlayersList } from '../../services/user';
+import {getPlayersList} from '../../services/user';
 
 const ControlPopup = (props) => {
 
@@ -60,7 +60,7 @@ const ControlPopup = (props) => {
       </div>
     )
   }
-
+  
   const stopStreaming = () => {
     return (
       <div id="stopStreaming">
@@ -71,29 +71,29 @@ const ControlPopup = (props) => {
       </div>
     )
   }
-
-
+  
+  
   const showUser = useRef(null);
   const userContainer = useRef(null);
   const [userList, setUserList] = useState([]);
 
   const getUsers = () => {
-    getPlayersList().then(res => { console.log(res.data); setUserList(res.data) });
+	getPlayersList().then(res => { console.log(res.data); setUserList(res.data) });
     userContainer.current.style.display = showUser.current.checked ? "block" : "none";
   }
 
   useEffect(() => {
     updateKickButton(userList.length>0?userList.length-1:0);
   }, [userList]);
-
+  
   useEffect(() => {
     setConnectedCallback(updateConnectedUser);
   }, []);
 
-  const updateConnectedUser = () => {
+  const updateConnectedUser = (users) => {
     console.log("updateConnectedUser");
+	setUserList(users);
   }
-
   const playerList = () => {
 
     return (
@@ -124,8 +124,8 @@ const ControlPopup = (props) => {
         {fillWindow()}
         {qualityControlOwnership()}
         {statsSetting()}
-        {playerList()}
-        {stopStreaming()}
+		{playerList()}
+		{stopStreaming()}
         <div id="Logout">
           <div className="settings-text">Logout</div>
           <label className="btn-overlay">

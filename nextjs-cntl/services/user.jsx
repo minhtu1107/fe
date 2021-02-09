@@ -37,7 +37,7 @@ const helloSecure = (params) => {
 
 const getPlayersList = (params) => {
   const url = getUrl('players/list');
-  console.log("request hello  " + url);
+  console.log("request players/list  " + url);
   return axios.get(url);
 }
 

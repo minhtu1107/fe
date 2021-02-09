@@ -24,7 +24,7 @@ const Player = (props) => {
   useEffect(() => {
     console.log("aaaaaaaaa");
     load();
-    setEmail(props.user.email);
+	setEmail(props.user.email);
   }, []);
 
   return (
