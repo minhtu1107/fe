@@ -1,10 +1,14 @@
-const {getPlayers} = require( '../../../services/players.jsx');
 
 export default async (req, res) => {
 
-  let emailObj = Array.from(getPlayers().values()).map(val => { return val.email; });
-
-  res.status(200);
-  res.json(emailObj);
-  return res.end();
+  try {
+    let emailObj = Array.from(req.players.values()).map(val => { return val.email; });
+    res.status(200);
+    res.json(emailObj);
+    return res.end();
+  } catch (e) {
+    res.status(500);
+    res.json("No players list");
+    return res.end();
+  }
 };

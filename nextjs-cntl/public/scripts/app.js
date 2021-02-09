@@ -1508,13 +1508,19 @@ function connect() {
 		console.log(`<- SS: ${event.data}`);
 		var msg = JSON.parse(event.data);
 		if (msg.type === 'config') {
-			onConfig(msg);
+      onConfig(msg);
+      console.log("email " + currentEmail + "==================================");
+      ws.send(JSON.stringify({ type: 'email', email: currentEmail }));
 		} else if (msg.type === 'playerCount') {
 			updateKickButton(msg.count - 1);
 		} else if (msg.type === 'answer') {
 			onWebRtcAnswer(msg);
 		} else if (msg.type === 'iceCandidate') {
 			onWebRtcIce(msg.candidate);
+    } else if (msg.type === 'newConnect') {
+      console.log(`newConnect: ${msg.players}`);
+      if(connectedUserCallback)
+        connectedUserCallback(msg.players);
 		} else {
 			console.log(`invalid SS message type: ${msg.type}`);
 		}
@@ -1574,8 +1580,19 @@ function load() {
 function disconnect() {
   try {
     ws.close();
+    ws = undefined;
   }
   catch(e) {
 
   }
+}
+
+let currentEmail = '';
+function setEmail(email) {
+  currentEmail = email;
+}
+
+let connectedUserCallback = null;
+function setConnectedCallback(callback) {
+  connectedUserCallback = callback;
 }

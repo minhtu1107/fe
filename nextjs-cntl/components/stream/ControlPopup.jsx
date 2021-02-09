@@ -1,6 +1,6 @@
 import Router from 'next/router';
-import { useState, useRef } from 'react';
-import {getPlayersList} from '../../services/user';
+import { useEffect, useState, useRef } from 'react';
+import { getPlayersList } from '../../services/user';
 
 const ControlPopup = (props) => {
 
@@ -63,23 +63,35 @@ const ControlPopup = (props) => {
 
   const stopStreaming = () => {
     return (
-      <div id="Stop Streaming">
-        <div className="settings-text">Stop</div>
+      <div id="stopStreaming">
+        <div className="settings-text">Stop Streaming</div>
         <label className="btn-overlay">
-          <button onClick={() => {disconnect(); Router.push('/streamming/player');}}>-</button>
+          <button onClick={() => { disconnect(); Router.push('/streamming/player'); }}>-</button>
         </label>
       </div>
     )
   }
 
-  // setInterval(() => { getPlayersList().then(res => { console.log(res.data) }) }, 5000);
+
   const showUser = useRef(null);
   const userContainer = useRef(null);
   const [userList, setUserList] = useState([]);
 
   const getUsers = () => {
-    getPlayersList().then(res => { console.log(res.data) });
+    getPlayersList().then(res => { console.log(res.data); setUserList(res.data) });
     userContainer.current.style.display = showUser.current.checked ? "block" : "none";
+  }
+
+  useEffect(() => {
+    updateKickButton(userList.length>0?userList.length-1:0);
+  }, [userList]);
+
+  useEffect(() => {
+    setConnectedCallback(updateConnectedUser);
+  }, []);
+
+  const updateConnectedUser = () => {
+    console.log("updateConnectedUser");
   }
 
   const playerList = () => {
@@ -93,8 +105,8 @@ const ControlPopup = (props) => {
         </label>
         <div id="usersContainer" ref={userContainer}>
           {userList.length > 0 ? userList.map(val => (
-            <div key={val.email} className="stats">
-              {val.email}
+            <div key={val} className="stats">
+              {val}
             </div>
           )) : (<div className="stats">
             No user

@@ -1,3 +1,5 @@
+const {getPlayers} = require( './services/players.jsx');
+
 const express = require('express');
 const next = require('next');
 
@@ -12,15 +14,15 @@ const config = {
   peerConnectionOptions: '{"iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
 };
 
+  // const logging = require('./modules/logging.js');
 if(!config.debug) {
-  const logging = require('./modules/logging.js');
-  logging.RegisterConsoleLogger();
+  // logging.RegisterConsoleLogger();
 }
 
 var streamerPort = 8888; // port to listen to WebRTC proxy connections
 var serverPublicIp;
 var clientConfig = { type: 'config', peerConnectionOptions: {} };
-let players = new Map(); // playerId <-> player, where player is either a web-browser or a native webrtc player
+let players = getPlayers(); //new Map(); // playerId <-> player, where player is either a web-browser or a native webrtc player
 let nextPlayerId = 100;
 
 try {
@@ -44,6 +46,11 @@ try {
 app.prepare().then(() => {
   const server = express();
 
+  server.get('/api/players/list', (req, res) => {
+    req.players = players;
+    return handle(req, res);
+  });
+
   server.all('*', (req, res) => {
     return handle(req, res);
   });
@@ -55,8 +62,9 @@ app.prepare().then(() => {
     console.log(`Listening on port ${port}...`);
   });
 
-  if(!config.debug) {
+
     let playerServer = new WebSocket.Server({ server: http });
+  if(!config.debug) {
     console.logColor(logging.Green, `WebSocket listening to Players connections on :${port}`)
     playerServer.on('connection', function (ws, req) {
       // Reject connection if streamer is not connected
@@ -105,6 +113,12 @@ app.prepare().then(() => {
               p.ws.close(4000, 'kicked');
             }
           }
+        } else if (msg.type == 'email') {
+          console.log(`<- player ${playerId}: email: ${msg.email}`);
+          let p = players.get(playerId);
+          p.email = msg.email;
+          let emailObj = Array.from(players.values()).map(val => { return val.email; });
+          ws.send(JSON.stringify({ type: 'newConnect', players: emailObj}));
         } else {
           console.error(`<- player ${playerId}: unsupported message type: ${msg.type}`);
           ws.close(1008, 'Unsupported message type');
@@ -141,12 +155,12 @@ app.prepare().then(() => {
   }
 });
 
-if(!config.debug) {
-  let WebSocket = require('ws');
+let WebSocket = require('ws');
 
   let streamerServer = new WebSocket.Server({ port: streamerPort, backlog: 1 });
-  console.logColor(logging.Green, `WebSocket listening to Streamer connections on :${streamerPort}`)
   let streamer; // WebSocket connected to Streamer
+if(!config.debug) {
+  console.logColor(logging.Green, `WebSocket listening to Streamer connections on :${streamerPort}`)
 
   streamerServer.on('connection', function (ws, req) {
     console.logColor(logging.Green, `Streamer connected: ${req.connection.remoteAddress}`);
