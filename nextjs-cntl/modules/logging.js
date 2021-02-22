@@ -7,11 +7,11 @@ var loggers=[];
 var logFunctions=[];
 var logColorFunctions=[];
 
-console.log = function(msg) {
-	logFunctions.forEach((logFunction) => {
-		logFunction(msg);
-	});
-}
+// console.log = function(msg) {
+// 	logFunctions.forEach((logFunction) => {
+// 		logFunction(msg);
+// 	});
+// }
 
 console.logColor = function(color, msg) {
 	logColorFunctions.forEach((logColorFunction) => {

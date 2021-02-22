@@ -293,4 +293,13 @@ img#playButton{
   position: absolute;
   color: white;
 }
+
+.permission-list {
+  top: 5%;
+  left: 2%;
+  position: absolute;
+  width: 300px;
+  z-index: 100;
+}
+
 /*** Toggle Switch styles ***/

@@ -41,6 +41,12 @@ const getPlayersList = (params) => {
   return axios.get(url);
 }
 
+const getAllUsers = (params) => {
+  const url = getUrl('getAllUsers');
+  console.log("request getUserList/list  " + url);
+  return axios.get(url);
+}
+
 export {
   loginCallback,
   login,
@@ -48,4 +54,5 @@ export {
   hello,
   helloSecure,
   getPlayersList,
+  getAllUsers,
 };
