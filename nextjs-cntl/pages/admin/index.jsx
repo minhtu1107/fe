@@ -182,10 +182,13 @@ export default function admin(props) {
 
       <style jsx>{`
         .add-new-container {
-          width: 50%;
           display: flex;
           flex-direction: row;
-          margin: 50px;
+          padding: 50px;
+          margin-bottom: 5px;
+          position:sticky;
+          top:0;
+          background-color: darkviolet
         }
 
         .email-space {
