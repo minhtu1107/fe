@@ -42,7 +42,7 @@ export default function admin(props) {
   }
 
   const getUsers = () => {
-    getAllUsers().then(res => { console.log(res.data); setUserList(res.data) });
+    getAllUsers().then(res => { setUserList(res.data) });
   }
 
   const addAUser = () => {

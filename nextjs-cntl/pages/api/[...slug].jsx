@@ -18,7 +18,7 @@ export default async (req, res) => {
   debugger
   return axios(params)
     .then((response) => {
-      console.log("success", response.data);
+      // console.log("success", response.data);
       res.status(200);
       res.json(response.data);
       return res.end();
