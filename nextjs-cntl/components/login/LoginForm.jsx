@@ -54,7 +54,11 @@ const LoginForm = () => {
               // } else {
               //   Router.push('/');
               // }
-              Router.push('/streamming/player');
+              if(session.id===1) {
+                Router.push('/admin');
+              } else {
+                Router.push('/streamming/player');
+              }
             }
           })
         })

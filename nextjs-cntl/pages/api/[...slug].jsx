@@ -9,10 +9,12 @@ export default async (req, res) => {
     method: req.method,
     url: `${process.env.API_BASE_URL}/${req.query.slug.join('/')}`,
     headers: headers,
-    data: req.body
+    data: req.body,
+    params: { id: req.query.id }
   };
-  
-  console.log("request "  + req.query.slug);
+
+  console.log("request " + JSON.stringify(req.query));
+
   debugger
   return axios(params)
     .then((response) => {

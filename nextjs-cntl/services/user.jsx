@@ -47,6 +47,17 @@ const getAllUsers = (params) => {
   return axios.get(url);
 }
 
+const removeUser = (userId) => {
+  const url = getUrl('removeUser');
+  console.log("removeUser  " + url);
+  return axios.delete(url, {params:{id:userId}});
+}
+
+const addUser = (params) => {
+  const url = getUrl('addUser');
+  return axios.put(url, params);
+}
+
 export {
   loginCallback,
   login,
@@ -55,4 +66,6 @@ export {
   helloSecure,
   getPlayersList,
   getAllUsers,
+  removeUser,
+  addUser,
 };
