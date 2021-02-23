@@ -10,7 +10,9 @@ export default async (req, res) => {
     url: `${process.env.API_BASE_URL}/${req.query.slug.join('/')}`,
     headers: headers,
     data: req.body,
-    params: { id: req.query.id }
+    params: { id: req.query.id || -1,
+              page: req.query.page || -1
+            }
   };
 
   console.log("request " + JSON.stringify(req.query));

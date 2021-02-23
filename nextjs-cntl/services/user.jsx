@@ -41,10 +41,10 @@ const getPlayersList = (params) => {
   return axios.get(url);
 }
 
-const getAllUsers = (params) => {
+const getAllUsers = (page) => {
   const url = getUrl('getAllUsers');
   console.log("request getUserList/list  " + url);
-  return axios.get(url);
+  return axios.get(url, {params:{page:page}});
 }
 
 const removeUser = (userId) => {

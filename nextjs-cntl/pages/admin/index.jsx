@@ -3,6 +3,7 @@ import { redirectTo } from '../../services/util';
 import { getSessionFromContext } from '../../services/auth';
 import { getAllUsers, removeUser, addUser } from '../../services/user';
 import Select from 'react-select';
+import ReactPaginate from 'react-paginate';
 
 export async function getServerSideProps(context) {
   const user = await getSessionFromContext(context);
@@ -10,20 +11,21 @@ export async function getServerSideProps(context) {
     redirectTo(context, '/auth/signin');
   }
 
-  const userList = await getAllUsers().then(res => { console.log(res.data); return res.data });
+  const userMap = await getAllUsers().then(res => { console.log(res.data); return res.data });
 
   return {
     props: {
       user,
-      userList
+      userMap
     }
   };
 }
 
 export default function admin(props) {
 
-  const [userList, setUserList] = useState(props.userList);
+  const [userList, setUserList] = useState(props.userMap["userList"]);
   const [newUser, setNewUser] = useState({id:0, email:"", password:"", role:""});
+  const [pageCount, setPageCount] = useState(props.userMap["pageCount"]);
 
   const handleRoleChange = (selected) => {
     console.log(`Option selected:`, selected);
@@ -41,21 +43,24 @@ export default function admin(props) {
     })
   }
 
-  const getUsers = () => {
-    getAllUsers().then(res => { setUserList(res.data) });
+  const getUsers = (page) => {
+    getAllUsers(page).then(res => { 
+                                setUserList(res.data["userList"]); 
+                                setPageCount(res.data["pageCount"]);
+                        });
   }
 
   const addAUser = () => {
     addUser(newUser).then(res => {
       console.log(res.data);
-      getUsers();
+      getUsers(0);
     });
   }
 
   const removeAUser = (id) => {
     removeUser(id).then(res => {
       console.log(res.data);
-      getUsers();
+      getUsers(0);
     });
   }
 
@@ -147,6 +152,27 @@ export default function admin(props) {
     { value: '3', label: 'Viewer' }
   ]
 
+  const handlePageChange = (page) => {
+    console.log(page);
+    getUsers(page.selected);
+  }
+
+  const renderPages = () => {
+    return (
+      <ReactPaginate
+        initialPage={0}
+        pageCount={pageCount}
+        pageRangeDisplayed={5}
+        marginPagesDisplayed={2}
+        breakLabel={'...'}
+        breakClassName={'break-me'}
+        containerClassName={'pagination'}
+        activeClassName={'active'}
+        onPageChange={handlePageChange}
+      />
+    )
+  }
+
   return (
     <div>
       <div className='add-new-container'>
@@ -178,6 +204,7 @@ export default function admin(props) {
           <button className="c-btn" onClick={addAUser}>{"Add"}</button>
         </div>
       </div>
+      {renderPages()}
       {renderUsers()}
 
       <style jsx>{`
