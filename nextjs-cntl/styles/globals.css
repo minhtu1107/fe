@@ -130,19 +130,26 @@ body {
   flex-direction: row;
   align-items: center;
   justify-content: center;
+  margin-bottom: 50px;
 }
 
 .pagination li {
-  background-color: #e0d1df;
   border-color: #00aeff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   margin: 5px;
+}
+
+.pagination li a {
   padding: 10px;
   min-width: 36px;
   min-height: 36px;
+  background-color: #e0d1df;
   text-align: center;
 }
 
-.pagination li.active {
+.pagination li.active a {
   background-color: #d36ca5;
 }
 

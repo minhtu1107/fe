@@ -204,8 +204,9 @@ export default function admin(props) {
           <button className="c-btn" onClick={addAUser}>{"Add"}</button>
         </div>
       </div>
-      {renderPages()}
+      
       {renderUsers()}
+      {renderPages()}
 
       <style jsx>{`
         .add-new-container {
