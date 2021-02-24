@@ -1,4 +1,5 @@
 import { useEffect, useState, useRef } from 'react';
+import Router from 'next/router';
 import { redirectTo } from '../../services/util';
 import { getSessionFromContext } from '../../services/auth';
 import { getAllUsers, removeUser, addUser } from '../../services/user';
@@ -202,6 +203,9 @@ export default function admin(props) {
         <div className='space'></div>
         <div className='role-space'>
           <button className="c-btn" onClick={addAUser}>{"Add"}</button>
+        </div>
+        <div>
+          <button className="c-btn" onClick={() => {Router.push('/streamming/player'); }}>{"Stream"}</button>
         </div>
       </div>
       
