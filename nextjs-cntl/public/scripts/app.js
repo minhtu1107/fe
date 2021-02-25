@@ -1580,7 +1580,8 @@ function load() {
 function disconnect() {
   try {
     ws.close();
-	ws = undefined;
+    ws = undefined;
+    connectedUserCallback([]);
   }
   catch(e) {
 

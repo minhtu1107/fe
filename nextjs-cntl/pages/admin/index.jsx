@@ -12,7 +12,7 @@ export async function getServerSideProps(context) {
     redirectTo(context, '/auth/signin');
   }
 
-  const userMap = await getAllUsers().then(res => { console.log(res.data); return res.data });
+  const userMap = await getAllUsers().then(res => { return res.data });
 
   return {
     props: {

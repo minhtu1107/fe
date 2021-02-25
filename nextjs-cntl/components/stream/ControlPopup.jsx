@@ -75,25 +75,27 @@ const ControlPopup = (props) => {
   
   const showUser = useRef(null);
   const userContainer = useRef(null);
-  const [userList, setUserList] = useState([]);
+  const [userList, setUserList] = useState(props.userList);
 
   const getUsers = () => {
-	getPlayersList().then(res => { console.log(res.data); setUserList(res.data) });
+    // getPlayersList().then(res => { console.log(res.data); setUserList(res.data) });
+    console.log(props.userList)
     userContainer.current.style.display = showUser.current.checked ? "block" : "none";
   }
-
-  useEffect(() => {
-    updateKickButton(userList.length>0?userList.length-1:0);
-  }, [userList]);
   
   useEffect(() => {
-    setConnectedCallback(updateConnectedUser);
-  }, []);
+    updateKickButton(props.userList.length>0?props.userList.length-1:0);
+  }, [props.userList]);
+  
+  // useEffect(() => {
+  //   setConnectedCallback(updateConnectedUser);
+  // }, []);
 
-  const updateConnectedUser = (users) => {
-    console.log("updateConnectedUser");
-	setUserList(users);
-  }
+  // const updateConnectedUser = (users) => {
+  //   console.log("updateConnectedUser");
+	// setUserList(users);
+  // }
+
   const playerList = () => {
 
     return (
@@ -104,7 +106,7 @@ const ControlPopup = (props) => {
           <div className="tgl-slider"></div>
         </label>
         <div id="usersContainer" ref={userContainer}>
-          {userList.length > 0 ? userList.map(val => (
+          {props.userList.length > 0 ? props.userList.map(val => (
             <div key={val} className="stats">
               {val}
             </div>
