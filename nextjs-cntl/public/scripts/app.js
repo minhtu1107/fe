@@ -1510,7 +1510,7 @@ function connect() {
 		if (msg.type === 'config') {
 			onConfig(msg);
 			console.log("email " + currentEmail + "==================================");
-			ws.send(JSON.stringify({ type: 'email', email: currentEmail }));
+			ws.send(JSON.stringify({ type: 'email', email: currentEmail, isAdmin: isAdminCallback?isAdminCallback():false }));
 		} else if (msg.type === 'playerCount') {
 			updateKickButton(msg.count - 1);
 		} else if (msg.type === 'answer') {
@@ -1518,12 +1518,14 @@ function connect() {
 		} else if (msg.type === 'iceCandidate') {
 			onWebRtcIce(msg.candidate);
 		} else if (msg.type === 'newConnect') {
-		    console.log(`newConnect: ${msg.players}`);
+      console.log(`newConnect: ${msg.players}`);
 			if(connectedUserCallback)
-              connectedUserCallback(msg.players);
-        } else {
-			console.log(`invalid SS message type: ${msg.type}`);
-		}
+        connectedUserCallback(msg.players);
+    } else if (msg.type === 'permission') {
+      setPermission(msg.value);
+		} else {
+      console.log(`invalid SS message type: ${msg.type}`);
+    }
 	};
 
 	ws.onerror = function (event) {
@@ -1551,6 +1553,10 @@ function connect() {
 function onConfig(config) {
 	let playerDiv = document.getElementById('player');
 	let playerElement = setupWebRtcPlayer(playerDiv, config);
+  if(isAdminCallback && webRtcPlayerObj) {
+    webRtcPlayerObj.setPermission(isAdminCallback());
+  }
+    
 	resizePlayerStyle();
 
 	switch (inputOptions.controlScheme) {
@@ -1596,4 +1602,9 @@ function setEmail(email) {
 let connectedUserCallback = null;
 function setConnectedCallback(callback) {
   connectedUserCallback = callback;
+}
+
+let isAdminCallback = null;
+function setIsAdminCallback(callback) {
+  isAdminCallback = callback;
 }

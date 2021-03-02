@@ -46,6 +46,15 @@ try {
   process.exit(2);
 }
 
+const grantPermissionCallback = (emails) => {
+  for (let p of players.values()) {
+    if(p.isAdmin || p.email === emails[1])
+      p.ws.send(JSON.stringify({ type: 'permission', value: true }));
+    else
+      p.ws.send(JSON.stringify({ type: 'permission', value: false }));
+  }
+}
+
 app.prepare().then(() => {
   const server = express();
 
@@ -73,6 +82,11 @@ app.prepare().then(() => {
   server.get('/api/players/list', (req, res) => {
     // console.log('api/players/list server.all ' + req.url);
     req.players = players;
+    return handle(req, res);
+  });
+
+  server.post('/api/players/grantPermission', (req, res) => {
+    req.callback = grantPermissionCallback;
     return handle(req, res);
   });
 	
@@ -157,6 +171,7 @@ app.prepare().then(() => {
           console.log(`<- player ${playerId}: email: ${msg.email}`);
           let p = players.get(playerId);
           p.email = msg.email;
+          p.isAdmin = msg.isAdmin;
           let emailObj = Array.from(players.values()).map(val => { return val.email; });
           for (let p of players.values()) {
             p.ws.send(JSON.stringify({ type: 'newConnect', players: emailObj}));
@@ -173,6 +188,10 @@ app.prepare().then(() => {
         streamer.send(JSON.stringify({ type: 'playerDisconnected', playerId: playerId }));
         // sendPlayerDisconnectedToFrontend();
         // sendPlayerDisconnectedToMatchmaker();
+        let emailObj = Array.from(players.values()).map(val => { return val.email; });
+        for (let p of players.values()) {
+          p.ws.send(JSON.stringify({ type: 'newConnect', players: emailObj}));
+        }
         sendPlayersCount();
       }
 

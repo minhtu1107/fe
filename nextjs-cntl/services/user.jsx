@@ -58,6 +58,12 @@ const addUser = (params) => {
   return axios.put(url, params);
 }
 
+const grantPermission = (params) => {
+  const url = getUrl('players/grantPermission');
+  console.log("secure/grantPermission client  " + url);
+  return axios.post(url, params);
+}
+
 export {
   loginCallback,
   login,
@@ -68,4 +74,5 @@ export {
   getAllUsers,
   removeUser,
   addUser,
+  grantPermission,
 };

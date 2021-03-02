@@ -29,6 +29,7 @@
         this.pcClient = null;
         this.dcClient = null;
         this.tnClient = null;
+        this.permission = false;
 
         this.sdpConstraints = {
           offerToReceiveAudio: 1,
@@ -264,7 +265,7 @@
 
         //Sends data across the datachannel
         this.send = function(data){
-            if(self.dcClient && self.dcClient.readyState == 'open'){
+            if(self.permission && self.dcClient && self.dcClient.readyState == 'open'){
                 //console.log('Sending data on dataconnection', self.dcClient)
                 self.dcClient.send(data);
             }
@@ -282,6 +283,10 @@
             let calcAggregatedStats = generateAggregatedStatsFunction();
             let printAggregatedStats = () => { self.getStats(calcAggregatedStats); }
             self.aggregateStatsIntervalId = setInterval(printAggregatedStats, checkInterval);
+        }
+
+        this.setPermission = function(val){
+          self.permission = val;
         }
     };
 

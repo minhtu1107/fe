@@ -4,6 +4,7 @@ import { getSessionFromContext } from '../../services/auth';
 import { redirectTo } from '../../services/util';
 import ControlPopup from '../../components/stream/ControlPopup';
 import Select from 'react-select';
+import { grantPermission } from '../../services/user';
 
 export async function getServerSideProps(context) {
   const user = await getSessionFromContext(context);
@@ -22,32 +23,51 @@ export async function getServerSideProps(context) {
 
 const Player = (props) => {
 
-  const [permission, setPermission] = useState(false);
-  const [userList, setUserList] = useState([]);
-
   const options = [
     { value: '1', label: 'Chocolate' },
     { value: '2', label: 'Strawberry' },
     { value: '3', label: 'Vanilla' }
   ]
+
+  const [permission, setPermission] = useState(false);
+  const [userList, setUserList] = useState([]);
+  const [permissionList, setPermissionList] = useState(options);
   
   const handleChange = (selected) => {
     console.log(`Option selected:`, selected);
+    if(selected!=null && selected!=undefined) {
+      grantPermission([props.user.email, selected.label])
+        .then(res => {
+          // console.log(`Option selected: res `, JSON.stringify(res));
+        });
+    }
   }
 
   useEffect(() => {
     setConnectedCallback(updateConnectedUser);
+    setIsAdminCallback(isAdmin);
   }, []);
 
   const updateConnectedUser = (users) => {
     console.log("updateConnectedUser");
 	  setUserList(users);
+    if(users.length>0) {
+      let temp = users.map( (val, idx) => {
+        return {value:idx, label:val};
+      });
+      setPermissionList(temp);
+    }
+  }
+
+  const isAdmin = () => {
+    console.log("isAdmin");
+	  return (props.user.role === 'ROLE_ADMIN');
   }
 
   useEffect(() => {
     console.log("aaaaaaaaa");
     load();
-	setEmail(props.user.email);
+	  setEmail(props.user.email);
   }, []);
 
   return (
@@ -63,9 +83,12 @@ const Player = (props) => {
           userList={userList}
         />  
         <div id="userName" className="user-name" >{props.user.email}</div>
-        <div className="permission-list">
-          <Select instanceId='permission' options={options} isClearable={true} onChange={handleChange}/>
-        </div>
+        {
+          (props.user.role === 'ROLE_ADMIN')?(
+          <div className="permission-list">
+            <Select instanceId='permission' options={permissionList} isClearable={true} onChange={handleChange}/>
+          </div>):''
+        }
       </div>
 
     </div>
