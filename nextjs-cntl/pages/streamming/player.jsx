@@ -35,12 +35,15 @@ const Player = (props) => {
   
   const handleChange = (selected) => {
     console.log(`Option selected:`, selected);
+    var emails = [props.user.email];
     if(selected!=null && selected!=undefined) {
-      grantPermission([props.user.email, selected.label])
-        .then(res => {
-          // console.log(`Option selected: res `, JSON.stringify(res));
-        });
+      emails.push(selected.label);
     }
+
+    grantPermission(emails)
+      .then(res => {
+        // console.log(`Option selected: res `, JSON.stringify(res));
+      });
   }
 
   useEffect(() => {
