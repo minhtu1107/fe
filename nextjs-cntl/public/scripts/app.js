@@ -1522,7 +1522,9 @@ function connect() {
 			if(connectedUserCallback)
         connectedUserCallback(msg.players);
     } else if (msg.type === 'permission') {
-      setPermission(msg.value);
+      if(isAdminCallback && webRtcPlayerObj) {
+        webRtcPlayerObj.setPermission(msg.value);
+      }
 		} else {
       console.log(`invalid SS message type: ${msg.type}`);
     }

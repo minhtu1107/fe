@@ -17,7 +17,7 @@ export default async (req, res) => {
     .then((response) => {
       // console.log("success", response.data);
       if(req.callback) {
-        req.callback(req.email);
+        req.callback(req.body);
         req.callback = undefined;
       }
       
