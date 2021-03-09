@@ -54,9 +54,9 @@ const ControlPopup = (props) => {
           <input type="checkbox" id="show-stats-tgl" className="tgl tgl-flat" />
           <div className="tgl-slider"></div>
         </label>
-        <div id="statsContainer">
+        {/* <div id="statsContainer">
           <div id="stats"></div>
-        </div>
+        </div> */}
       </div>
     )
   }

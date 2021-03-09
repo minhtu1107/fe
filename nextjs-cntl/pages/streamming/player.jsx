@@ -92,6 +92,19 @@ const Player = (props) => {
             <Select instanceId='permission' options={permissionList} isClearable={true} onChange={handleChange}/>
           </div>):''
         }
+        {/* <div id="stats" style={{
+          top:'10%',
+          position:'absolute',
+          zIndex:'100'
+        }}>FPS</div> */}
+
+        <div id="statsContainer" style={{
+          top:'10%',
+          position:'absolute',
+          zIndex:'100'}}
+          >
+          <div id="stats"></div>
+        </div>
       </div>
 
     </div>
