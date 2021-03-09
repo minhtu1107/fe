@@ -4,8 +4,8 @@ const fs = require('fs');
 const path = require('path');
 
 const config = {
-  debug:false,
-  UseHTTPS:true,
+  debug:true,
+  UseHTTPS:false,
   publicIp: '54.249.83.187',
   peerConnectionOptions: '{"iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
 };
@@ -48,7 +48,7 @@ try {
 
 const grantPermissionCallback = (emails) => {
   for (let p of players.values()) {
-    if(p.isAdmin || p.email === emails[1])
+    if(p.isAdmin || (emails.length>1 && p.email === emails[1]))
       p.ws.send(JSON.stringify({ type: 'permission', value: true }));
     else
       p.ws.send(JSON.stringify({ type: 'permission', value: false }));

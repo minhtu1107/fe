@@ -1128,6 +1128,7 @@ function registerMouseEnterAndLeaveEvents(playerElement) {
 		Data.setUint8(0, MessageType.MouseEnter);
 		sendInputData(Data.buffer);
 		playerElement.pressMouseButtons(e);
+    playerElement.style.cursor = 'none';
 	};
 
 	playerElement.onmouseleave = function (e) {
@@ -1138,6 +1139,7 @@ function registerMouseEnterAndLeaveEvents(playerElement) {
 		Data.setUint8(0, MessageType.MouseLeave);
 		sendInputData(Data.buffer);
 		playerElement.releaseMouseButtons(e);
+    playerElement.style.cursor = 'default';
 	};
 }
 
@@ -1152,7 +1154,7 @@ function registerLockedMouseEvents(playerElement) {
 	document.exitPointerLock = document.exitPointerLock || document.mozExitPointerLock;
 
 	playerElement.onclick = function () {
-		playerElement.requestPointerLock();
+		// playerElement.requestPointerLock();
 	};
 
 	// Respond to lock state change events
@@ -1188,6 +1190,12 @@ function registerLockedMouseEvents(playerElement) {
 		emitMouseMove(x, y, e.movementX, e.movementY);
 	}
 
+  playerElement.onmousemove = function (e) {
+    x = e.clientX;
+		y = e.clientY;
+		emitMouseMove(x, y, e.movementX, e.movementY);
+	};
+  
 	playerElement.onmousedown = function (e) {
 		emitMouseDown(e.button, x, y);
 	};
