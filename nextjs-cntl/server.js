@@ -7,7 +7,7 @@ const config = {
   debug:true,
   UseHTTPS:false,
   publicIp: '54.249.83.187',
-  peerConnectionOptions: '{"iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
+  peerConnectionOptions: '{"offerExtmapAllowMixed":false, "iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
 };
 
 const port = process.env.PORT || config.UseHTTPS?80:3000;
