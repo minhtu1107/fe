@@ -298,8 +298,15 @@ img#playButton{
   top: 5%;
   left: 2%;
   position: absolute;
-  width: 300px;
+/*  width: 300px;*/
   z-index: 100;
+  display: flex;
+  align-items: center;
+}
+
+.permission-list-select {
+  margin-left: 20px;
+  width: 300px;
 }
 
 /*** Toggle Switch styles ***/

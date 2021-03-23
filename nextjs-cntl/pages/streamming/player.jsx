@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head'
+import Router from 'next/router';
 import { getSessionFromContext } from '../../services/auth';
 import { redirectTo } from '../../services/util';
 import ControlPopup from '../../components/stream/ControlPopup';
@@ -87,10 +88,14 @@ const Player = (props) => {
         />  
         <div id="userName" className="user-name" >{props.user.email}</div>
         {
-          (props.user.role === 'ROLE_ADMIN')?(
-          <div className="permission-list">
-            <Select instanceId='permission' options={permissionList} isClearable={true} onChange={handleChange}/>
-          </div>):''
+          (props.user.role === 'ROLE_ADMIN') ? (
+            <div className="permission-list">
+              <button className="c-btn" onClick={() => { Router.push('/admin'); }}>{"Admin"}</button>
+              <div className="permission-list-select">
+                <Select instanceId='permission' options={permissionList} isClearable={true} onChange={handleChange} />
+              </div>
+            </div>
+          ) : ''
         }
         {/* <div id="stats" style={{
           top:'10%',
