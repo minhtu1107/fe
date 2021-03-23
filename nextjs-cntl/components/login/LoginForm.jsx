@@ -3,7 +3,8 @@ import Router from 'next/router';
 import Link from 'next/link';
 import { getCsrfToken, getSession } from 'next-auth/client'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { loginCallback } from '../../services/user';
+import { loginCallback, login } from '../../services/user';
+import { setUserCookie } from '../../services/auth';
 import {validateInput} from'../../services/util'
 // const conf = require('../../config/const.json');
 // const lang = require('../../locale/lang.json')
@@ -33,7 +34,7 @@ const LoginForm = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
 
-    const csrfToken = await getCsrfToken();
+    // const csrfToken = await getCsrfToken();
 
     let email = userLogin.email;
     let password = userLogin.password;
@@ -43,7 +44,7 @@ const LoginForm = () => {
     await setErrInputField({email: errEmail, password: errPassword});
 
     if(errEmail === "" && errPassword === "") {
-      loginCallback({ email, password, csrfToken })
+      /*loginCallback({ email, password, csrfToken })
         .then((response) => {
           getSession().then((session) => {
             if (!session) {
@@ -61,6 +62,32 @@ const LoginForm = () => {
               }
             }
           })
+        })
+        .catch(err => {
+          console.log(err);
+        })*/
+      loginCallback({ email, password })
+        .then((response) => {
+          if(response.data.id && response.data.email && response.data.access_token && response.data.role) {
+            let session = {
+              id: response.data.id,
+              email: response.data.email,
+              access_token: response.data.access_token,
+              role: response.data.role
+            }
+
+            setUserCookie(null, "session_token", session);
+
+            if(session.id===1) {
+              Router.push('/admin');
+            } else {
+              Router.push('/streamming/player');
+            }
+          } else {
+            setErrLogin("lang.login.un_authentication");
+          }
+          
+          
         })
         .catch(err => {
           console.log(err);

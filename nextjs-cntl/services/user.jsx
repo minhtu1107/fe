@@ -3,7 +3,8 @@ import qs from 'qs';
 import { getDefaultHeaders, getUrl } from './util';
 
 const loginCallback = (params) => {
-  const url = getUrl('auth/callback/credentials');
+  // const url = getUrl('auth/callback/credentials');
+  const url = getUrl('oauth/token');
   return axios.post(url, params);
 }
 
@@ -19,7 +20,7 @@ const login = (params) => {
 }
 
 const logout = (params) => {
-  const url = getUrl('auth/signout');
+  const url = getUrl('oauth/logout');
   return axios.post(url, params);
 }
 
