@@ -13,11 +13,12 @@ const isAdmin = async (context) => {
 
 const getSessionFromContext = async (context) => {
   const session = parseCookies(context);
-  console.log("ssssssss " + JSON.stringify(session));
-  if (!session.session_token) {
+  let t = JSON.parse(session.session_token);
+
+  if (!t) {
     return null;
   }
-  return session.session_token;
+  return t;
 }
 
 const getToken = async ({ req }) => {
@@ -26,12 +27,10 @@ const getToken = async ({ req }) => {
   // const secureCookie = (process.env.NODE_ENV === 'production');
   // const session = await jwt.getToken({ req, secret, secureCookie });
 
-  const session = await getSessionFromContext({ req });
-  if (!session.session_token) {
-    return null;
-  }
+  const session = await getSessionFromContext({req});
+  // console.log("ssssssss " + JSON.stringify(session));
 
-  return session.session_token.access_token;
+  return session.access_token;
 };
 
 const setUserCookie = (context, key, data) => {
