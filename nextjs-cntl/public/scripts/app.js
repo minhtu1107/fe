@@ -1128,7 +1128,7 @@ function registerMouseEnterAndLeaveEvents(playerElement) {
 		Data.setUint8(0, MessageType.MouseEnter);
 		sendInputData(Data.buffer);
 		playerElement.pressMouseButtons(e);
-    playerElement.style.cursor = 'none';
+    // playerElement.style.cursor = 'none';
 	};
 
 	playerElement.onmouseleave = function (e) {
@@ -1189,8 +1189,8 @@ function registerLockedMouseEvents(playerElement) {
 		}
 		emitMouseMove(x, y, e.movementX, e.movementY);
 	}
-
-  playerElement.onmousemove = function (e) {
+  
+	playerElement.onmousemove = function (e) {
     x = e.clientX;
 		y = e.clientY;
 		emitMouseMove(x, y, e.movementX, e.movementY);
@@ -1510,8 +1510,18 @@ function connect() {
 		return;
 	}
 
-	ws = new WebSocket(window.location.href.replace('http://', 'ws://').replace('https://', 'wss://'));
+  let admin = isAdminCallback?isAdminCallback():false;
+  fetch('https://vt.tairapromote.com/getStreamUrl?isAdmin=' + admin)
+    .then(response => response.json())
+    .then(data => {
+      console.log(data);
+      connectWS(data);
+    });
+}
 
+function connectWS(url) {
+	ws = new WebSocket(url);
+    
 	ws.onmessage = function (event) {
 		console.log(`<- SS: ${event.data}`);
 		var msg = JSON.parse(event.data);
@@ -1530,12 +1540,12 @@ function connect() {
 			if(connectedUserCallback)
         connectedUserCallback(msg.players);
     } else if (msg.type === 'permission') {
-      if(isAdminCallback && webRtcPlayerObj) {
+      if(webRtcPlayerObj) {
         webRtcPlayerObj.setPermission(msg.value);
       }
-		} else {
-      console.log(`invalid SS message type: ${msg.type}`);
-    }
+    } else {
+			console.log(`invalid SS message type: ${msg.type}`);
+		}
 	};
 
 	ws.onerror = function (event) {
@@ -1566,7 +1576,7 @@ function onConfig(config) {
   if(isAdminCallback && webRtcPlayerObj) {
     webRtcPlayerObj.setPermission(isAdminCallback());
   }
-    
+  
 	resizePlayerStyle();
 
 	switch (inputOptions.controlScheme) {

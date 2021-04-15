@@ -4,16 +4,18 @@ const fs = require('fs');
 const path = require('path');
 
 const config = {
-  debug:true,
-  UseHTTPS:false,
+  debug:false,
+  UseHTTPS:true,
+  UseMatchmaker:true,
   publicIp: '54.249.83.187',
-  peerConnectionOptions: '{"offerExtmapAllowMixed":false, "iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
+  peerConnectionOptions: '{"offerExtmapAllowMixed":false , "iceServers":[{"urls":["stun:stun.l.google.com:19302","turn:54.249.83.187:19303"],"username":"PixelStreamingUser","credential":"Another TURN in the road"}]}'
 };
 
 const port = process.env.PORT || config.UseHTTPS?80:3000;
 const httpsPort = 443;
-const certPath = 'C:\\Certbot\\live\\vt.tairapromote.com';
-const dev = process.env.NODE_ENV !== 'production';
+const certPath = 'C:\\vt.tairapromote.com';
+// const dev = process.env.NODE_ENV !== 'production';
+const dev = process.env.REACT_APP_NODE_ENV.trim() !== 'production';
 const app = next({ dev });
 const handle = app.getRequestHandler();
 
@@ -84,12 +86,23 @@ app.prepare().then(() => {
     req.players = players;
     return handle(req, res);
   });
-
+  
+  server.get('/getStreamUrl', (req, res) => {
+    console.log('getStreamUrl ' + JSON.stringify(req.query));
+    let cirus = getAvailableCirrusServer();
+    if(cirus != undefined) {
+      res.json(cirus.socketUrl);
+      console.log('cirus.clientConfig ' + cirus.address + ':' + cirus.port);
+    }
+    
+    return res.end();
+  });
+	
   server.post('/api/players/grantPermission', (req, res) => {
     req.callback = grantPermissionCallback;
     return handle(req, res);
   });
-	
+  
   server.all('*', (req, res) => {
 	// console.log('server.all' + req.url);
     return handle(req, res);
@@ -129,7 +142,8 @@ app.prepare().then(() => {
 
       let playerId = ++nextPlayerId;
       console.log(`player ${playerId} (${req.connection.remoteAddress}) connected`);
-      players.set(playerId, { ws: ws, id: playerId });
+
+      players.set(playerId, { ws: ws, id: playerId});
 
       function sendPlayersCount() {
         let playerCountMsg = JSON.stringify({ type: 'playerCount', count: players.size });
@@ -148,7 +162,7 @@ app.prepare().then(() => {
           ws.close(1008, 'Cannot parse');
           return;
         }
-
+        
         if (msg.type == 'offer') {
           console.log(`<- player ${playerId}: offer`);
           msg.playerId = playerId;
@@ -187,7 +201,8 @@ app.prepare().then(() => {
         players.delete(playerId);
         streamer.send(JSON.stringify({ type: 'playerDisconnected', playerId: playerId }));
         // sendPlayerDisconnectedToFrontend();
-        // sendPlayerDisconnectedToMatchmaker();
+        sendPlayerDisconnectedToMatchmaker();
+
         let emailObj = Array.from(players.values()).map(val => { return val.email; });
         for (let p of players.values()) {
           p.ws.send(JSON.stringify({ type: 'newConnect', players: emailObj}));
@@ -202,13 +217,13 @@ app.prepare().then(() => {
 
       ws.on('error', function (error) {
         console.error(`player ${playerId} connection error: ${error}`);
-        ws.close(1006 /* abnormal closure */, error);
+        ws.close(1006 /* abnormal closure */,  "playerServer error " + error);
         onPlayerDisconnected();
       });
 
       // sendPlayerConnectedToFrontend();
-      // sendPlayerConnectedToMatchmaker();
-
+      sendPlayerConnectedToMatchmaker();
+      
       ws.send(JSON.stringify(clientConfig));
 
       sendPlayersCount();
@@ -216,9 +231,9 @@ app.prepare().then(() => {
   }
 });
 
-let streamerServer = new WebSocket.Server({ port: streamerPort, backlog: 1 });
-console.logColor(logging.Green, `WebSocket listening to Streamer connections on :${streamerPort}`)
-let streamer; // WebSocket connected to Streamer
+  let streamerServer = new WebSocket.Server({ port: streamerPort, backlog: 1 });
+  console.logColor(logging.Green, `WebSocket listening to Streamer connections on :${streamerPort}`)
+  let streamer; // WebSocket connected to Streamer
   
 if(!config.debug) {
   streamerServer.on('connection', function (ws, req) {
@@ -266,7 +281,7 @@ if(!config.debug) {
 
     ws.on('error', function (error) {
       console.error(`streamer connection error: ${error}`);
-      ws.close(1006 /* abnormal closure */, error);
+      ws.close(1006 /* abnormal closure */, "streamer error " + error);
       onStreamerDisconnected();
     });
 
@@ -283,3 +298,151 @@ function disconnectAllPlayers(code, reason) {
   }
 }
 
+//---------------------------------------------------------------------
+//matchmaker server
+const net = require('net');
+
+// A list of all the Cirrus server which are connected to the Matchmaker.
+var cirrusServers = new Map();
+
+var matchmakerPort = 9999;
+
+// Get a Cirrus server if there is one available which has no clients connected.
+function getAvailableCirrusServer() {
+	for (cirrusServer of cirrusServers.values()) {
+		if (cirrusServer.numConnectedClients === 0) {
+			return cirrusServer;
+		}
+	}
+	
+	console.log('WARNING: No empty Cirrus servers are available');
+	return undefined;
+}
+
+function disconnect(connection) {
+  console.log(`Ending connection to remote address ${connection.remoteAddress}`);
+  connection.end();
+}
+
+const matchmakerServer = net.createServer((connection) => {
+connection.on('data', (data) => {
+  try {
+    message = JSON.parse(data);
+  } catch(e) {
+    console.log(`ERROR (${e.toString()}): Failed to parse Cirrus information from data: ${data.toString()}`);
+    disconnect(connection);
+    return;
+  }
+  if (message.type === 'connect') {
+    // A Cirrus server connects to this Matchmaker server.
+    cirrusServer = {
+      address: message.address,
+      port: message.port,
+      numConnectedClients: 0,
+      socketUrl:message.socketUrl,
+    };
+    cirrusServers.set(connection, cirrusServer);
+    console.log(`Cirrus server ${cirrusServer.address}:${cirrusServer.port} connected to Matchmaker`);
+  } else if (message.type === 'clientConnected') {
+    // A client connects to a Cirrus server.
+    cirrusServer = cirrusServers.get(connection);
+    cirrusServer.numConnectedClients++;
+    console.log(`Client connected to Cirrus server ${cirrusServer.address}:${cirrusServer.port}`);
+  } else if (message.type === 'clientDisconnected') {
+    // A client disconnects from a Cirrus server.
+    cirrusServer = cirrusServers.get(connection);
+    cirrusServer.numConnectedClients--;
+    console.log(`Client disconnected from Cirrus server ${cirrusServer.address}:${cirrusServer.port}`);
+  } else {
+    console.log('ERROR: Unknown data: ' + JSON.stringify(message));
+    disconnect(connection);
+  }
+});
+
+// A Cirrus server disconnects from this Matchmaker server.
+connection.on('error', () => {
+  cirrusServers.delete(connection);
+  console.log(`Cirrus server ${cirrusServer.address}:${cirrusServer.port} disconnected from Matchmaker`);
+});
+});
+
+matchmakerServer.listen(matchmakerPort, () => {
+  console.log('Matchmaker listening on *:' + matchmakerPort);
+});
+
+/**
+ * Function that handles the connection to the matchmaker.
+ */
+
+ if (config.UseMatchmaker) {
+  var matchmakerAddress = '127.0.0.1';
+	var matchmaker = new net.Socket();
+  var matchmakerRetryInterval = 5;
+
+	matchmaker.on('connect', function() {
+		console.log(`Cirrus connected to Matchmaker ${matchmakerAddress}:${matchmakerPort}`);
+		message = {
+			type: 'connect',
+			address: typeof serverPublicIp === 'undefined' ? '127.0.0.1' : serverPublicIp,
+			port: port,
+      // socketUrl: 'wss://' + (typeof serverPublicIp === 'undefined' ? '127.0.0.1' : serverPublicIp) + ':' + httpsPort
+      socketUrl: 'wss://vt.tairapromote.com'
+		};
+		matchmaker.write(JSON.stringify(message));
+	});
+
+	matchmaker.on('error', (err) => {
+		console.log(`Matchmaker connection error ${JSON.stringify(err)}`);
+	});
+
+	matchmaker.on('end', () => {
+		console.log('Matchmaker connection ended');
+	});
+
+	matchmaker.on('close', (hadError) => {
+		console.log(`Matchmaker connection closed (hadError=${hadError})`);
+		reconnect();
+	});
+
+	// Attempt to connect to the Matchmaker
+	function connect() {
+    if(streamer!=undefined)
+      matchmaker.connect(matchmakerPort, matchmakerAddress);
+    else 
+      reconnect();
+	}
+
+	// Try to reconnect to the Matchmaker after a given period of time
+	function reconnect() {
+		console.log(`Try reconnect to Matchmaker in ${matchmakerRetryInterval} seconds`)
+		setTimeout(function() {
+			connect();
+		}, matchmakerRetryInterval * 1000);
+	}
+
+	reconnect();
+}
+
+// The Matchmaker will not re-direct clients to this Cirrus server if any client
+// is connected.
+function sendPlayerConnectedToMatchmaker() {
+	if (!config.UseMatchmaker)
+		return;
+
+	message = {
+		type: 'clientConnected'
+	};
+	matchmaker.write(JSON.stringify(message));
+}
+
+// The Matchmaker is interested when nobody is connected to a Cirrus server
+// because then it can re-direct clients to this re-cycled Cirrus server.
+function sendPlayerDisconnectedToMatchmaker() {
+	if (!config.UseMatchmaker)
+		return;
+
+	message = {
+		type: 'clientDisconnected'
+	};
+	matchmaker.write(JSON.stringify(message));
+}
